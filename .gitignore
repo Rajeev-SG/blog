@@ -6,3 +6,4 @@ node_modules/
 docs/
 using-express-with-vercel.md
 project-configuration-vercel-json.md
+logs_result.csv
