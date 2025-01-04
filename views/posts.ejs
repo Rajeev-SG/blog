@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts - My Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/github.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/darkMode.js"></script>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    <div class="container">
+        <main>
+            <h1>All Posts</h1>
+            <div class="posts-list">
+                <% posts.forEach(post => { %>
+                    <article class="post-preview">
+                        <h2><a href="/posts/<%= post.slug %>"><%= post.title %></a></h2>
+                        <div class="post-meta">
+                            <time datetime="<%= post.date %>"><%= post.date %></time>
+                        </div>
+                    </article>
+                <% }); %>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

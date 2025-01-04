@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= posts[0] ? posts[0].title : 'My Blog' %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/github.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/darkMode.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
+            themeVariables: document.documentElement.getAttribute('data-theme') === 'dark' ? {
+                lineColor: '#adb5bd',
+                textColor: '#f8f9fa'
+            } : {}
+        });
+    </script>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    <div class="container">
+        <main>
+            <% if (posts.length > 0) { %>
+                <article class="post-content">
+                    <h1><%= posts[0].title %></h1>
+                    <div class="post-meta">
+                        <time datetime="<%= posts[0].date %>"><%= posts[0].date %></time>
+                    </div>
+                    <%- posts[0].content %>
+                </article>
+            <% } else { %>
+                <p>No posts found.</p>
+            <% } %>
+        </main>
+    </div>
+    <script>
+        document.querySelectorAll('pre code').forEach((el) => {
+            hljs.highlightElement(el);
+        });
+        document.querySelectorAll('.mermaid').forEach(diagram => {
+            diagram.setAttribute('data-diagram', diagram.textContent);
+        });
+    </script>
+</body>
+</html>
