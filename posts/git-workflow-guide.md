@@ -262,3 +262,8 @@ This section explains all the command-line interface (CLI) commands used in this
 5. When in doubt about a destructive command (like branch deletion), use safer versions first:
    - Try `git branch -d` before `git branch -D`
    - Try merging branches locally before pushing to remote
+
+### General Tips
+1. Always use a correctly formatted .gitignore file before adding and committing changes to the repository branch. Example: https://github.com/github/gitignore/blob/main/Node.gitignore
+2. If needed increase buffer sizes by `git config http.postBuffer 524288000`
+3. Remove accidentally added files and folders by `git rm --cached` or for folders `git rm -r --cached` then commit and push if needed
