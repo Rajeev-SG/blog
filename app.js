@@ -12,6 +12,7 @@ app.use(express.static('public'));
 
 // Set up view engine
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Custom renderer to handle Mermaid diagrams
 const renderer = new marked.Renderer();
