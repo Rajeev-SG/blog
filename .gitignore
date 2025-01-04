@@ -1,2 +1,5 @@
 /posts/content
 scrapnotes.md
+node_modules
+.DS_Store
+posts/.DS_Store
