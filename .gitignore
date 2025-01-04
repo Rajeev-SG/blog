@@ -5,3 +5,4 @@ node_modules/
 **/.DS_Store
 docs/
 using-express-with-vercel.md
+project-configuration-vercel-json.md
