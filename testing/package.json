@@ -1,0 +1,16 @@
+{
+  "name": "blog-cross-browser-testing",
+  "version": "1.0.0",
+  "description": "Cross-browser testing for blog website",
+  "scripts": {
+    "test": "playwright test",
+    "test:chrome": "playwright test --project=chromium-desktop",
+    "test:firefox": "playwright test --project=firefox-desktop",
+    "test:responsive": "node blog-responsive-test.js",
+    "test:all": "npm run test:responsive && npm run test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.40.0",
+    "playwright": "^1.40.0"
+  }
+}
