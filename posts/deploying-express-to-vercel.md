@@ -1,8 +1,8 @@
 # Deploying an Express.js Application to Vercel: A Practical Guide
 
-*Published: January 5, 2025*
+*Updated: January 5, 2025*
 
-Deploying an Express.js application to Vercel might seem straightforward at first, but there are several important considerations and potential pitfalls to be aware of. This guide walks through the process, highlighting common issues and their solutions based on real deployment experience.
+Deploying an Express.js application to Vercel is fairly straightforward, but there are several considerations and pitfalls to be aware of. This guide provides a basic overview of the process, highlighting common issues and their solutions based on real deployment experience.
 
 ## Initial Setup
 
@@ -34,6 +34,205 @@ Your deployment needs a `vercel.json` configuration file in your project root. H
   ]
 }
 ```
+
+## Project Setup and Configuration
+
+### 1. Create a New Express Project
+First, create a new directory and initialize your project:
+
+```bash
+mkdir my-express-app
+cd my-express-app
+npm init -y
+```
+
+### 2. Install Dependencies
+Install Express.js and any other required dependencies:
+
+```bash
+npm install express ejs
+```
+
+### 3. Project Structure
+Create the following structure:
+```
+my-express-app/
+├── api/
+│   └── index.js          # Main Express application entry point
+├── views/               # Directory for view templates
+│   ├── partials/       # Reusable template components
+│   │   ├── header.ejs  # Common header template
+│   │   └── footer.ejs  # Common footer template
+│   ├── home.ejs        # Home page template
+│   └── error.ejs       # Error page template
+├── public/             # Static assets directory
+│   ├── css/           # Stylesheets
+│   │   └── style.css
+│   ├── js/            # Client-side JavaScript
+│   │   └── main.js
+│   └── images/        # Image assets
+├── package.json        # Project dependencies and scripts
+└── vercel.json        # Vercel deployment configuration
+```
+
+Example template files:
+
+`views/partials/header.ejs`:
+```ejs
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Express on Vercel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+        </nav>
+    </header>
+```
+
+`views/partials/footer.ejs`:
+```ejs
+    <footer>
+        <p>&copy; 2025 Express on Vercel</p>
+    </footer>
+    <script src="/js/main.js"></script>
+</body>
+</html>
+```
+
+`views/home.ejs`:
+```ejs
+<%- include('partials/header') %>
+    <main>
+        <h1>Welcome to Express on Vercel</h1>
+        <p>Your server is running successfully!</p>
+    </main>
+<%- include('partials/footer') %>
+```
+
+`views/error.ejs`:
+```ejs
+<%- include('partials/header') %>
+    <main>
+        <h1>Error</h1>
+        <p><%= message %></p>
+        <p><%= error.status %></p>
+        <pre><%= error.stack %></pre>
+    </main>
+<%- include('partials/footer') %>
+```
+
+### 4. Express Server Setup
+Create `api/index.js` with this Express server configuration that properly handles views and static files:
+
+```javascript
+const express = require("express");
+const path = require("path");
+const app = express();
+
+// View engine setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '..', 'views'));
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// Routes
+app.get("/", (req, res) => {
+    res.render('home');
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: process.env.NODE_ENV === 'development' ? err : {}
+    });
+});
+
+// Only used in local development - Vercel handles this differently in production
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(3000, () => console.log("Server ready on port 3000."));
+}
+
+module.exports = app;
+```
+
+### 5. Vercel Configuration
+Create `vercel.json` in your project root:
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.js"
+    }
+  ]
+}
+```
+
+### 6. Local Testing
+Before deploying, test your application locally:
+
+1. Install the Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Run the development server:
+```bash
+vercel dev
+```
+
+Your app should now be running at `http://localhost:3000`.
+
+### 7. Deployment Options
+
+#### Option A: Deploy with Vercel CLI
+1. Login to Vercel:
+```bash
+vercel login
+```
+
+2. Deploy your application:
+```bash
+vercel
+```
+
+#### Option B: Deploy via GitHub
+1. Push your code to a GitHub repository
+2. Visit [Vercel Dashboard](https://vercel.com/dashboard)
+3. Click "New Project"
+4. Select your GitHub repository
+5. Click "Deploy"
 
 ## Common Issues and Solutions
 
